@@ -1,0 +1,31 @@
+# Import the Iris dataset from sklearn
+from sklearn.datasets import load_iris
+import pandas as pd
+import numpy as np
+# Load the Iris dataset to a variable
+iris = load_iris()
+# Load the data into 2 different pandas dataframes. 
+# X for the features
+X = pd.DataFrame(iris.data, columns=iris.feature_names)
+# y for the targets
+y = pd.Categorical.from_codes(iris.target, iris.target_names)
+X.head()
+print(y)
+y = pd.get_dummies(y)
+y.head()
+# import the function
+from sklearn.model_selection import train_test_split
+#split the data into training set and testing set
+X_train, X_test, y_train, y_test = train_test_split(X, y, random_state=1)
+#import decision tree classifier from sklearn.tree
+from sklearn.tree import DecisionTreeClassifier
+dt=DecisionTreeClassifier()
+#train the model with training data
+dt.fit(X_train, y_train)
+y_pred=dt.predict(X_test)
+from sklearn.metrics import confusion_matrix,accuracy_score
+species = np.array(y_test).argmax(axis=1)
+predictions = np.array(y_pred).argmax(axis=1)
+print(confusion_matrix(species, predictions))
+accuracy = accuracy_score(y_test, y_pred)
+print("Accuracy: {:.2f}%".format(accuracy * 100))
